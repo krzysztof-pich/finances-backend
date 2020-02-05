@@ -6,12 +6,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import pl.pich.finances.jwt.config.JwtTokenUtil;
 import pl.pich.finances.jwt.model.JwtRequest;
 import pl.pich.finances.jwt.model.JwtResponse;
 import pl.pich.finances.jwt.service.JwtUserDetailsService;
+import pl.pich.finances.user.model.User;
 
 @RestController
 @CrossOrigin
@@ -29,8 +29,8 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final User user = userDetailsService.loadUserByEmail(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(user);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
