@@ -14,7 +14,6 @@ public class BillController {
 
     @PostMapping(path = "/add")
     public Bill addBill(@RequestBody Bill bill) {
-        Bill bill1 = billService.addBill(bill);
-        return bill1;
+        return billService.addBill(bill);
     }
 }
