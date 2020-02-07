@@ -1,15 +1,16 @@
 package pl.pich.finances.bill.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pl.pich.finances.user.model.User;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "bills")
 public class Bill {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +33,8 @@ public class Bill {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+    private BigDecimal amount;
+
     public Integer getId() {
         return id;
     }
@@ -40,6 +43,7 @@ public class Bill {
         this.id = id;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
@@ -88,5 +92,13 @@ public class Bill {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }

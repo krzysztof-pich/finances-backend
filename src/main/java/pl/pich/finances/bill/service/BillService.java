@@ -18,4 +18,8 @@ public class BillService {
     public Bill addBill(Bill bill) {
         return this.billRepository.save(bill);
     }
+
+    public Iterable<Bill> getBillList() {
+        return this.billRepository.findAll();
+    }
 }
