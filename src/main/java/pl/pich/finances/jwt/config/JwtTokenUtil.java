@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import pl.pich.finances.jwt.model.ExtendedUserDetails;
 import pl.pich.finances.user.model.User;
 
 @Component
@@ -49,9 +50,9 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //generate token for user
-    public String generateToken(User user) {
+    public String generateToken(ExtendedUserDetails user) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, user);
+        return doGenerateToken(claims, user.getDbUser());
     }
 
     //while creating the token -

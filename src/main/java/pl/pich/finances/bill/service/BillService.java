@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.repository.BillRepository;
+import pl.pich.finances.user.model.User;
 
 @Service
 public class BillService {
@@ -19,7 +20,7 @@ public class BillService {
         return this.billRepository.save(bill);
     }
 
-    public Iterable<Bill> getBillList() {
-        return this.billRepository.findAll();
+    public Iterable<Bill> getBillsByUser(User user) {
+        return this.billRepository.findByUser(user);
     }
 }

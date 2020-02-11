@@ -1,5 +1,8 @@
 package pl.pich.finances.bill.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Period {
     DAILY("daily"),
     WEEKLY("weekly"),

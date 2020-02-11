@@ -7,5 +7,5 @@ import pl.pich.finances.user.model.User;
 import java.util.List;
 
 public interface BillRepository extends CrudRepository<Bill, Integer> {
-//    public List<Bill> findByUser(User user);
+    public List<Bill> findByUser(User user);
 }
