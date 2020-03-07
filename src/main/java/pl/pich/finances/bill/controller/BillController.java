@@ -1,6 +1,7 @@
 package pl.pich.finances.bill.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,14 @@ public class BillController {
         ExtendedUserDetails userDetails =
                 (ExtendedUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return billService.getBillsByUser(userDetails.getDbUser());
+    }
+
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        if (billService.delete(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

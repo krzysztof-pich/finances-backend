@@ -1,6 +1,7 @@
 package pl.pich.finances.bill.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.repository.BillRepository;
@@ -22,5 +23,15 @@ public class BillService {
 
     public Iterable<Bill> getBillsByUser(User user) {
         return this.billRepository.findByUser(user);
+    }
+
+    public boolean delete(Integer id) {
+        try {
+            this.billRepository.deleteById(id);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+
     }
 }

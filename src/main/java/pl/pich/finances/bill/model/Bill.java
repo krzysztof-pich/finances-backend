@@ -22,6 +22,8 @@ public class Bill {
 
     private String name;
 
+    private Integer timeOfPayment;
+
     @Enumerated(EnumType.STRING)
     private Period period;
 
@@ -58,6 +60,14 @@ public class Bill {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getTimeOfPayment() {
+        return timeOfPayment;
+    }
+
+    public void setTimeOfPayment(Integer timeOfPayment) {
+        this.timeOfPayment = timeOfPayment;
     }
 
     public Period getPeriod() {
