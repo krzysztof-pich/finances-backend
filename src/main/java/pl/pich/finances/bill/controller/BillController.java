@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.service.BillService;
 import pl.pich.finances.jwt.model.ExtendedUserDetails;
+import pl.pich.finances.user.model.User;
 
 import java.security.Principal;
 
@@ -26,11 +27,20 @@ public class BillController {
         return billService.addBill(bill);
     }
 
+    @GetMapping(path = {"/{id}"})
+    public Bill getBill(@PathVariable("id") Integer id) {
+        return billService.getBill(getUser(), id);
+    }
+
     @GetMapping
     public Iterable<Bill> getBills() {
+        return billService.getBillsByUser(getUser());
+    }
+
+    private User getUser() {
         ExtendedUserDetails userDetails =
                 (ExtendedUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return billService.getBillsByUser(userDetails.getDbUser());
+        return userDetails.getDbUser();
     }
 
     @DeleteMapping(path = {"/{id}"})

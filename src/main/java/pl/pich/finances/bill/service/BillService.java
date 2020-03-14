@@ -21,6 +21,10 @@ public class BillService {
         return this.billRepository.save(bill);
     }
 
+    public Bill getBill(User user, Integer id) {
+        return this.billRepository.findByUserAndId(user, id);
+    }
+
     public Iterable<Bill> getBillsByUser(User user) {
         return this.billRepository.findByUser(user);
     }
