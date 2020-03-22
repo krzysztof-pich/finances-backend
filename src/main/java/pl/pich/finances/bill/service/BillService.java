@@ -25,6 +25,20 @@ public class BillService {
         return this.billRepository.findByUserAndId(user, id);
     }
 
+    public Bill modifyBill(User user, Integer id, Bill newBill) {
+        Bill oldBill = this.billRepository.findByUserAndId(user, id);
+
+        oldBill.setName(newBill.getName());
+        oldBill.setTimeOfPayment(newBill.getTimeOfPayment());
+        oldBill.setPeriod(newBill.getPeriod());
+        oldBill.setIntervalModulo(newBill.getIntervalModulo());
+        oldBill.setStartDate(newBill.getStartDate());
+        oldBill.setEndDate(newBill.getEndDate());
+        oldBill.setAmount(newBill.getAmount());
+
+        return this.billRepository.save(oldBill);
+    }
+
     public Iterable<Bill> getBillsByUser(User user) {
         return this.billRepository.findByUser(user);
     }

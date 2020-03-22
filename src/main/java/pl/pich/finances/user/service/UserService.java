@@ -13,6 +13,7 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {

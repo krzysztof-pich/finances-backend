@@ -11,7 +11,6 @@ import pl.pich.finances.jwt.config.JwtTokenUtil;
 import pl.pich.finances.jwt.model.JwtRequest;
 import pl.pich.finances.jwt.model.JwtResponse;
 import pl.pich.finances.jwt.service.JwtUserDetailsService;
-import pl.pich.finances.user.model.User;
 
 @RestController
 @CrossOrigin
