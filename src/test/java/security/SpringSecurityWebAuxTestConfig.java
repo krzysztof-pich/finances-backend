@@ -21,7 +21,9 @@ public class SpringSecurityWebAuxTestConfig {
         User user = new User();
         user.setEmail("test@pich.pl");
         user.setPassword("laser");
+        user.setId(1);
         ExtendedUserDetails basicActiveUser = new ExtendedUserDetails(user.getEmail(), user.getPassword(), user, new ArrayList<>());
+
 
 
 

@@ -1,14 +1,17 @@
 package pl.pich.finances.bill.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.service.BillService;
 import pl.pich.finances.jwt.service.RegisteredUser;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @RequestMapping(path = "/bills")
 @RestController
@@ -33,7 +36,8 @@ public class BillController {
 
     @GetMapping(path = {"/{id}"})
     public Bill getBill(@PathVariable("id") Integer id) {
-        return billService.getBill(registeredUser.getUser(), id);
+        Optional<Bill> bill = billService.getBill(registeredUser.getUser(), id);
+        return bill.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bill not found"));
     }
 
     @GetMapping

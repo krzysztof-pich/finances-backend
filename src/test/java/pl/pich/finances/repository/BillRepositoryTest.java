@@ -39,7 +39,7 @@ public class BillRepositoryTest {
         entityManager.persist(phoneBill);
         entityManager.flush();
 
-        Bill found = billRepository.findByUserAndId(user, phoneBill.getId());
+        Bill found = billRepository.findByUserAndId(user, phoneBill.getId()).get();
         assertEquals(found.getName(), phoneBill.getName());
     }
 

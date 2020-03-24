@@ -1,5 +1,6 @@
 package pl.pich.finances.bill.controller;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,32 +46,39 @@ public class BillControllerTest {
     @MockBean
     private RegisteredUser registeredUser;
 
-    @Autowired
-    private WebApplicationContext context;
+    private Bill testBill;
+    private User testUser;
 
-    @Test
-    @WithUserDetails("test@pich.pl")
-    public void givenBills_whenGetBills_thenReturnJsonArray() throws Exception {
-        User user = new User();
-        user.setEmail("test@pich.pl");
-        user.setPassword("test");
-        user.setId(3);
 
-        Bill testBill = new Bill();
+
+    @Before
+    public void prepareTestData() {
+        testUser =  new User();
+        testUser.setEmail("test@pich.pl");
+        testUser.setPassword("test");
+        testUser.setId(3);
+
+
+        testBill = new Bill();
         testBill.setId(4);
         testBill.setAmount(BigDecimal.valueOf(39));
         testBill.setIntervalModulo(1);
         testBill.setPeriod(Period.fromCode("monthly"));
         testBill.setStartDate(new GregorianCalendar(2020, Calendar.MARCH, 11).getTime());
         testBill.setTimeOfPayment(14);
-        testBill.setUser(user);
+        testBill.setUser(testUser);
 
         testBill.setName("test");
 
-        List<Bill> allBills = Arrays.asList(testBill);
 
-        given(billService.getBillsByUser(user)).willReturn(allBills);
-        given(registeredUser.getUser()).willReturn(user);
+    }
+
+    @Test
+    @WithUserDetails("test@pich.pl")
+    public void givenBills_whenGetBills_thenReturnJsonArray() throws Exception {
+        List<Bill> allBills = Arrays.asList(testBill);
+        given(billService.getBillsByUser(testUser)).willReturn(allBills);
+        given(registeredUser.getUser()).willReturn(testUser);
 
         mvc.perform(get("/bills")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -86,7 +94,20 @@ public class BillControllerTest {
                 .andExpect(jsonPath("$[0].amount", is(39)))
                 .andExpect(jsonPath("$[0].user").doesNotExist())
             ;
+    }
 
+    @Test
+    @WithUserDetails("test@pich.pl")
+    public void givenIncorrectBillId_whenGetBill_thenThrowError() throws Exception {
+        List<Bill> allBills = Arrays.asList(testBill);
+        given(billService.getBillsByUser(testUser)).willReturn(allBills);
+        given(registeredUser.getUser()).willReturn(testUser);
 
+        mvc.perform(get("/bills/1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.errorMessage", is("Bill not found")))
+            .andExpect(jsonPath("$.details", hasSize(0)))
+        ;
     }
 }

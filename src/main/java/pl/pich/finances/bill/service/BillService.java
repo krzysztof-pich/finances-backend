@@ -3,9 +3,13 @@ package pl.pich.finances.bill.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.repository.BillRepository;
 import pl.pich.finances.user.model.User;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 public class BillService {
@@ -21,12 +25,13 @@ public class BillService {
         return this.billRepository.save(bill);
     }
 
-    public Bill getBill(User user, Integer id) {
+    public Optional<Bill> getBill(User user, Integer id) {
+
         return this.billRepository.findByUserAndId(user, id);
     }
 
     public Bill modifyBill(User user, Integer id, Bill newBill) {
-        Bill oldBill = this.billRepository.findByUserAndId(user, id);
+        Bill oldBill = this.billRepository.findByUserAndId(user, id).orElseThrow();
 
         oldBill.setName(newBill.getName());
         oldBill.setTimeOfPayment(newBill.getTimeOfPayment());
