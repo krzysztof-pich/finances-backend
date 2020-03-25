@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.pich.finances.app.exceptions.NotFoundException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.service.BillService;
 import pl.pich.finances.jwt.service.RegisteredUser;
@@ -35,9 +36,8 @@ public class BillController {
     }
 
     @GetMapping(path = {"/{id}"})
-    public Bill getBill(@PathVariable("id") Integer id) {
-        Optional<Bill> bill = billService.getBill(registeredUser.getUser(), id);
-        return bill.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bill not found"));
+    public Bill getBill(@PathVariable("id") Integer id) throws NotFoundException {
+        return billService.getBill(registeredUser.getUser(), id);
     }
 
     @GetMapping

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import pl.pich.finances.app.exceptions.NotFoundException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.repository.BillRepository;
 import pl.pich.finances.user.model.User;
@@ -25,9 +26,10 @@ public class BillService {
         return this.billRepository.save(bill);
     }
 
-    public Optional<Bill> getBill(User user, Integer id) {
-
-        return this.billRepository.findByUserAndId(user, id);
+    public Bill getBill(User user, Integer id) throws NotFoundException {
+        return this.billRepository
+                .findByUserAndId(user, id)
+                    .orElseThrow(() -> new NotFoundException("Bill not found"));
     }
 
     public Bill modifyBill(User user, Integer id, Bill newBill) {

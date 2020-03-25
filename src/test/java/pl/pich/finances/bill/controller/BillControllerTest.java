@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -58,7 +59,6 @@ public class BillControllerTest {
         testUser.setPassword("test");
         testUser.setId(3);
 
-
         testBill = new Bill();
         testBill.setId(4);
         testBill.setAmount(BigDecimal.valueOf(39));
@@ -67,10 +67,7 @@ public class BillControllerTest {
         testBill.setStartDate(new GregorianCalendar(2020, Calendar.MARCH, 11).getTime());
         testBill.setTimeOfPayment(14);
         testBill.setUser(testUser);
-
         testBill.setName("test");
-
-
     }
 
     @Test
@@ -103,7 +100,7 @@ public class BillControllerTest {
         given(billService.getBillsByUser(testUser)).willReturn(allBills);
         given(registeredUser.getUser()).willReturn(testUser);
 
-        mvc.perform(get("/bills/1")
+        mvc.perform(get("/bills/4")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.errorMessage", is("Bill not found")))
