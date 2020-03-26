@@ -3,14 +3,11 @@ package pl.pich.finances.bill.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import pl.pich.finances.app.exceptions.NotFoundException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.repository.BillRepository;
 import pl.pich.finances.user.model.User;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Service
 public class BillService {
@@ -32,8 +29,8 @@ public class BillService {
                     .orElseThrow(() -> new NotFoundException("Bill not found"));
     }
 
-    public Bill modifyBill(User user, Integer id, Bill newBill) {
-        Bill oldBill = this.billRepository.findByUserAndId(user, id).orElseThrow();
+    public Bill modifyBill(User user, Integer id, Bill newBill) throws NotFoundException {
+        Bill oldBill = this.getBill(user, id);
 
         oldBill.setName(newBill.getName());
         oldBill.setTimeOfPayment(newBill.getTimeOfPayment());
@@ -50,12 +47,11 @@ public class BillService {
         return this.billRepository.findByUser(user);
     }
 
-    public boolean delete(Integer id) {
+    public void delete(Integer id) throws NotFoundException {
         try {
             this.billRepository.deleteById(id);
-            return true;
         } catch (EmptyResultDataAccessException e) {
-            return false;
+            throw new NotFoundException("Bill not found");
         }
 
     }

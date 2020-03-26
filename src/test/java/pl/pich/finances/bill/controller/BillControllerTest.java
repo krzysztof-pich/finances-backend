@@ -5,14 +5,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
+import pl.pich.finances.app.exceptions.NotFoundException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.model.Period;
 import pl.pich.finances.bill.service.BillService;
@@ -96,8 +95,7 @@ public class BillControllerTest {
     @Test
     @WithUserDetails("test@pich.pl")
     public void givenIncorrectBillId_whenGetBill_thenThrowError() throws Exception {
-        List<Bill> allBills = Arrays.asList(testBill);
-        given(billService.getBillsByUser(testUser)).willReturn(allBills);
+        given(billService.getBill(testUser, 4)).willThrow(new NotFoundException("Bill not found"));
         given(registeredUser.getUser()).willReturn(testUser);
 
         mvc.perform(get("/bills/4")

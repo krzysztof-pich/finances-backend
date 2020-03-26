@@ -1,37 +1,34 @@
 package pl.pich.finances.bill.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import pl.pich.finances.app.exceptions.NotFoundException;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.service.BillService;
 import pl.pich.finances.jwt.service.RegisteredUser;
 
-import java.security.Principal;
-import java.util.Optional;
-
 @RequestMapping(path = "/bills")
 @RestController
 @CrossOrigin
 public class BillController {
-    @Autowired
-    private BillService billService;
+    private final BillService billService;
 
-    @Autowired
-    private RegisteredUser registeredUser;
+    private final RegisteredUser registeredUser;
+
+    public BillController(BillService billService, RegisteredUser registeredUser) {
+        this.billService = billService;
+        this.registeredUser = registeredUser;
+    }
 
     @PostMapping
-    public Bill addBill(@RequestBody Bill bill, @AuthenticationPrincipal Principal principal) {
+    public Bill addBill(@RequestBody Bill bill) {
         bill.setUser(registeredUser.getUser());
         return billService.addBill(bill);
     }
 
     @PutMapping(path = {"/{id}"})
-    public Bill modifyBill(@PathVariable("id") Integer id, @RequestBody Bill newBill) {
+    public Bill modifyBill(@PathVariable("id") Integer id, @RequestBody Bill newBill) throws NotFoundException {
         return billService.modifyBill(registeredUser.getUser(), id, newBill);
     }
 
@@ -46,13 +43,8 @@ public class BillController {
     }
 
     @DeleteMapping(path = {"/{id}"})
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-        if (billService.delete(id)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) throws NotFoundException {
+        billService.delete(id);
+        return ResponseEntity.ok().build();
     }
-
-
 }
