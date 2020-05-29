@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.pich.finances.app.exceptions.NotFoundException;
+import pl.pich.finances.bill.dto.BillDto;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.service.BillService;
 import pl.pich.finances.jwt.service.RegisteredUser;
+
+import javax.validation.Valid;
 
 @RequestMapping(path = "/bills")
 @RestController
@@ -22,9 +25,8 @@ public class BillController {
     }
 
     @PostMapping
-    public Bill addBill(@RequestBody Bill bill) {
-        bill.setUser(registeredUser.getUser());
-        return billService.addBill(bill);
+    public Bill addBill(@Valid @RequestBody BillDto bill) {
+        return billService.addBill(bill, registeredUser.getUser());
     }
 
     @PutMapping(path = {"/{id}"})

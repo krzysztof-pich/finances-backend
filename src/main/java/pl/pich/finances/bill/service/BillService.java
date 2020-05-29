@@ -1,9 +1,10 @@
 package pl.pich.finances.bill.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.pich.finances.app.exceptions.NotFoundException;
+import pl.pich.finances.bill.dto.BillDto;
 import pl.pich.finances.bill.model.Bill;
 import pl.pich.finances.bill.repository.BillRepository;
 import pl.pich.finances.user.model.User;
@@ -11,15 +12,17 @@ import pl.pich.finances.user.model.User;
 
 @Service
 public class BillService {
-
-    @Autowired
     private final BillRepository billRepository;
+    private final ModelMapper modelMapper;
 
-    public BillService(BillRepository billRepository) {
+    public BillService(BillRepository billRepository, ModelMapper modelMapper) {
         this.billRepository = billRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public Bill addBill(Bill bill) {
+    public Bill addBill(BillDto billDto, User user) {
+        Bill bill = modelMapper.map(billDto, Bill.class);
+        bill.setUser(user);
         return this.billRepository.save(bill);
     }
 
