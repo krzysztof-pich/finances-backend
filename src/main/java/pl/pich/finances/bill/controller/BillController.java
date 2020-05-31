@@ -15,8 +15,8 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin
 public class BillController {
-    private final BillService billService;
 
+    private final BillService billService;
     private final RegisteredUser registeredUser;
 
     public BillController(BillService billService, RegisteredUser registeredUser) {

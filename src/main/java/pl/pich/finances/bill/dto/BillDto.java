@@ -3,11 +3,9 @@ package pl.pich.finances.bill.dto;
 import pl.pich.finances.bill.model.Period;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BillDto {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
     private Integer id;
     private String name;
